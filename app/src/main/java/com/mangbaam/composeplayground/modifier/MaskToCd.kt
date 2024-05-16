@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -31,22 +32,36 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mangbaam.composeplayground.R
 import com.mangbaam.composeplayground.ui.theme.ComposePlaygroundTheme
 
 fun Modifier.maskToCd(
-    holeSize: (size: Size) -> Float = { minOf(it.width, it.height) / 8f },
+    holeSize: (size: Size) -> Float = { it.minDimension / 8f },
+    borderWidth: Dp = 2.dp,
 ) = graphicsLayer {
     compositingStrategy = CompositingStrategy.Offscreen
 }.drawWithCache {
     val path = Path().apply {
         addOval(Rect(topLeft = Offset.Zero, bottomRight = Offset(size.width, size.height)))
     }
+    val borderWidthPx = borderWidth.toPx()
     onDrawWithContent {
         clipPath(path) {
             this@onDrawWithContent.drawContent()
         }
+        drawCircle(
+            color = Color.White.copy(alpha = 0.4f),
+            radius = size.minDimension / 2f,
+            center = center,
+            style = Stroke(width = borderWidthPx),
+        )
+        drawCircle(
+            color = Color.Black.copy(alpha = 0.4f),
+            radius = holeSize(size) + borderWidthPx,
+            center = center,
+        )
         drawCircle(
             color = Color.Black,
             radius = holeSize(size),
