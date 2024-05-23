@@ -39,27 +39,32 @@ import com.mangbaam.composeplayground.ui.theme.ComposePlaygroundTheme
 
 fun Modifier.maskToCd(
     holeSize: (size: Size) -> Float = { it.minDimension / 8f },
-    borderWidth: Dp = 2.dp,
+    innerBorderWidth: Dp = 20.dp,
+    outerBorderWidth: Dp = 2.dp,
+    innerBorderColor: Color = Color.Black.copy(alpha = 0.4f),
+    outerBorderColor: Color = Color.White.copy(alpha = 0.4f),
 ) = graphicsLayer {
     compositingStrategy = CompositingStrategy.Offscreen
 }.drawWithCache {
     val path = Path().apply {
         addOval(Rect(topLeft = Offset.Zero, bottomRight = Offset(size.width, size.height)))
     }
-    val borderWidthPx = borderWidth.toPx()
+    val innerBorderWidthPx = innerBorderWidth.toPx()
+    val outerBorderWidthPx = outerBorderWidth.toPx()
+
     onDrawWithContent {
         clipPath(path) {
             this@onDrawWithContent.drawContent()
         }
         drawCircle(
-            color = Color.White.copy(alpha = 0.4f),
+            color = outerBorderColor,
             radius = size.minDimension / 2f,
             center = center,
-            style = Stroke(width = borderWidthPx),
+            style = Stroke(width = outerBorderWidthPx),
         )
         drawCircle(
-            color = Color.Black.copy(alpha = 0.4f),
-            radius = holeSize(size) + borderWidthPx,
+            color = innerBorderColor,
+            radius = holeSize(size) + innerBorderWidthPx,
             center = center,
         )
         drawCircle(
@@ -113,7 +118,7 @@ private fun MaskToCdPreview() {
                 Image(
                     modifier = Modifier
                         .graphicsLayer(
-                            rotationX = 0f,
+                            rotationX = 40f,
                             cameraDistance = 20f,
                         )
                         .rotate(angle)
