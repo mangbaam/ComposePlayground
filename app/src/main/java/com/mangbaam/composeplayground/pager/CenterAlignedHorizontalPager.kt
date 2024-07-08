@@ -1,9 +1,8 @@
 package com.mangbaam.composeplayground.pager
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.snapping.SnapFlingBehavior
+import androidx.compose.foundation.gestures.TargetedFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -37,7 +36,6 @@ import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.mangbaam.composeplayground.ui.theme.ComposePlaygroundTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CenterAlignedHorizontalPager(
     state: PagerState,
@@ -45,16 +43,17 @@ fun CenterAlignedHorizontalPager(
     contentPadding: PaddingValues? = null,
     centerHorizontal: Boolean = true,
     pageSize: PageSize = PageSize.Fill,
-    beyondBoundsPageCount: Int = PagerDefaults.BeyondBoundsPageCount,
+    beyondViewportPageCount: Int = PagerDefaults.BeyondViewportPageCount,
     pageSpacing: Dp = 0.dp,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
-    flingBehavior: SnapFlingBehavior = PagerDefaults.flingBehavior(state = state),
+    flingBehavior: TargetedFlingBehavior = PagerDefaults.flingBehavior(state = state),
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     key: ((index: Int) -> Any)? = null,
-    pageNestedScrollConnection: NestedScrollConnection = remember(state) {
-        PagerDefaults.pageNestedScrollConnection(state, Orientation.Horizontal)
-    },
+    pageNestedScrollConnection: NestedScrollConnection = PagerDefaults.pageNestedScrollConnection(
+        state,
+        Orientation.Horizontal
+    ),
     pageContent: @Composable PagerScope.(page: Int) -> Unit
 ) {
     var width by remember { mutableStateOf(0.dp) }
@@ -81,7 +80,7 @@ fun CenterAlignedHorizontalPager(
         },
         contentPadding = calculatedContentPadding,
         pageSize = pageSize,
-        beyondBoundsPageCount = beyondBoundsPageCount,
+        beyondViewportPageCount = beyondViewportPageCount,
         pageSpacing = pageSpacing,
         verticalAlignment = verticalAlignment,
         flingBehavior = flingBehavior,
@@ -93,7 +92,6 @@ fun CenterAlignedHorizontalPager(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 private fun CenterAlignedHorizontalPagerPreview() {
