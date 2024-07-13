@@ -1,12 +1,10 @@
 package com.mangbaam.composeplayground.extension
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 
-@OptIn(ExperimentalFoundationApi::class)
 val PagerState.pageOffset: Float
     get() = currentPage + currentPageOffsetFraction
 
-@OptIn(ExperimentalFoundationApi::class)
-fun PagerState.calculateCurrentOffsetForPage(page: Int): Float =
-    pageOffset - page
+fun PagerState.offsetForPage(page: Int): Float = pageOffset - page
+fun PagerState.startOffsetForPage(page: Int): Float = offsetForPage(page).coerceAtLeast(0f)
+fun PagerState.endOffsetForPage(page: Int): Float = offsetForPage(page).coerceAtMost(1f)

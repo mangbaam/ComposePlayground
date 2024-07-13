@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mangbaam.composeplayground.extension.calculateCurrentOffsetForPage
+import com.mangbaam.composeplayground.extension.offsetForPage
 import com.mangbaam.composeplayground.pager.CenterAlignedHorizontalPager
 import com.mangbaam.composeplayground.ui.theme.ComposePlaygroundTheme
 import kotlinx.coroutines.launch
@@ -51,7 +51,7 @@ fun BloomIndicator(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         repeat(count) {
-            val pageOffset = pagerState.calculateCurrentOffsetForPage(it).toDouble()
+            val pageOffset = pagerState.offsetForPage(it).toDouble()
             val scale = (1.0 - pageOffset.absoluteValue.coerceAtMost(1.0)).absoluteValue
             val offset = scale * 2.3
             val alpha = scale.toFloat().coerceAtLeast(unFocusedAlpha.coerceIn(0f..1f) / 4)
