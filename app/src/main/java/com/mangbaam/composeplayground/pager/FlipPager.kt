@@ -8,9 +8,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.Orientation.Horizontal
 import androidx.compose.foundation.gestures.Orientation.Vertical
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,7 +23,6 @@ import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
@@ -35,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -49,12 +52,14 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import coil.compose.AsyncImage
 import com.mangbaam.composeplayground.extension.endOffsetForPage
 import com.mangbaam.composeplayground.extension.offsetForPage
 import com.mangbaam.composeplayground.extension.startOffsetForPage
@@ -367,22 +372,49 @@ private sealed class FlipShape : Shape {
 @Composable
 private fun FlipPagerPreview() {
     ComposePlaygroundTheme {
-        Surface {
-            val state = rememberPagerState { 10 }
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.LightGray,
+        ) {
+            val state = rememberPagerState { 16 }
 
             FlipPager(
                 modifier = Modifier
                     .padding(30.dp)
-                    .aspectRatio(1.75f),
+                    .aspectRatio(817 * 2 / 1024f),
                 state = state,
             ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Cyan),
-                    contentAlignment = Alignment.Center,
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
-                    Text(text = "page: ${page + 1}", style = MaterialTheme.typography.bodyLarge)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        AsyncImage(
+                            model = if (page == 0) {
+                                "https://contents.kyobobook.co.kr/resources/fo/images/common/ink/img_preview_logo.jpg"
+                            } else "https://contents.kyobobook.co.kr/prvw/007/693/91/5800007769391/58000077693910${28 + page * 2}.jpg",
+                            contentDescription = null,
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        AsyncImage(
+                            model = "https://contents.kyobobook.co.kr/prvw/007/693/91/5800007769391/58000077693910${28 + (page * 2 + 1)}.jpg",
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
         }
