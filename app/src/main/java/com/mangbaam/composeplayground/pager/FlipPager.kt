@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -52,7 +51,6 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
@@ -244,7 +242,7 @@ private fun BoxScope.PageFlip(
 
                     FlipShape.Bottom -> {
                         rotationX = maxOf(
-                            (-state.offsetForPage(page) * 180f).coerceIn(0f..90f),
+                            (state.offsetForPage(page) * 180f).coerceIn(0f..90f),
                             animatedOverScrollAmount().coerceAtMost(0f) * -20f,
                         )
                     }
@@ -273,12 +271,12 @@ private fun BoxScope.PageFlip(
                     Color.Black.copy(
                         alpha = when (shape) {
                             FlipShape.Top, FlipShape.Left -> maxOf(
-                                (state.endOffsetForPage(page).absoluteValue * 0.9f.coerceIn(0f..1f)),
+                                (state.endOffsetForPage(page).absoluteValue * 0.9f).coerceIn(0f..1f),
                                 animatedOverScrollAmount() * 0.3f,
                             )
 
                             FlipShape.Bottom, FlipShape.Right -> maxOf(
-                                (state.startOffsetForPage(page) * 0.9f.coerceIn(0f..1f)),
+                                (state.startOffsetForPage(page) * 0.9f).coerceIn(0f..1f),
                                 -animatedOverScrollAmount() * 0.3f
                             )
                         }

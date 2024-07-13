@@ -67,4 +67,5 @@ dependencies {
 
     implementation(platform(libs.coil.bom))
     implementation(libs.coil.compose)
+    implementation(libs.jsoup)
 }
